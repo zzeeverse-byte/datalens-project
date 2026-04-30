@@ -1,5 +1,8 @@
 from fastapi import FastAPI, UploadFile, File
 from backend.csv_service import parse_csv, store_csv_in_sqlite
+from backend.data_service import profile_dataframe
+from backend.database import get_db_connection
+import pandas as pd
 import tempfile
 import os
 
@@ -37,4 +40,16 @@ async def upload_csv(file: UploadFile = File(...)):
             "columns": df.columns.tolist()
         }
     except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+@app.get("/api/profile")
+def get_profile(table_name: str):
+    conn = get_db_connection()
+    try:
+        df = pd.read_sql(f"SELECT * FROM {table_name}", conn)
+        conn.close()
+        profile = profile_dataframe(df)
+        return profile
+    except Exception as e:
+        conn.close()
         return {"status": "error", "message": str(e)}

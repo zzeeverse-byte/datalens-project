@@ -1,7 +1,11 @@
 import React, { useCallback, useState } from 'react';
 import { uploadCSV } from '../services/api';
 
-export const UploadZone: React.FC = () => {
+interface UploadZoneProps {
+    onUploadSuccess: (tableName: string) => void;
+}
+
+export const UploadZone: React.FC<UploadZoneProps> = ({ onUploadSuccess }) => {
     const [message, setMessage] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
 
@@ -34,6 +38,7 @@ export const UploadZone: React.FC = () => {
                 setMessage(`Error: ${data.message}`);
             } else {
                 setMessage(`Success! Uploaded ${data.row_count} rows. Table: ${data.table_name}`);
+                onUploadSuccess(data.table_name);
             }
         } catch (error: any) {
             setMessage(`Upload failed: ${error.message}`);

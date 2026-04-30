@@ -14,3 +14,10 @@ export const uploadCSV = async (file: File) => {
 
     return response.data;
 };
+
+export const getProfile = async (tableName: string) => {
+    const response = await axios.get(`${API_BASE_URL}/profile`, {
+        params: { table_name: tableName }
+    });
+    return response.data;
+};
