@@ -40,32 +40,53 @@ def profile_dataframe(df: pd.DataFrame) -> dict:
         
     return profile
 
-def get_avg_grade_by_school(table_name: str):
+def build_where_clause(filters: dict):
+    if not filters:
+        return "", []
+    
+    clauses = []
+    params = []
+    for k, v in filters.items():
+        if v is not None:
+            clauses.append(f"{k} = ?")
+            params.append(v)
+            
+    if not clauses:
+        return "", []
+        
+    return " WHERE " + " AND ".join(clauses), params
+
+def get_avg_grade_by_school(table_name: str, filters: dict = None):
     conn = get_db_connection()
-    df = pd.read_sql(f"SELECT school, AVG(G3) as avg_G3 FROM {table_name} GROUP BY school", conn)
+    where_clause, params = build_where_clause(filters)
+    df = pd.read_sql(f"SELECT school, AVG(G3) as avg_G3 FROM {table_name}{where_clause} GROUP BY school", conn, params=params)
     conn.close()
     return df.to_dict(orient="records")
 
-def get_studytime_vs_grade(table_name: str):
+def get_studytime_vs_grade(table_name: str, filters: dict = None):
     conn = get_db_connection()
-    df = pd.read_sql(f"SELECT studytime, AVG(G3) as avg_G3 FROM {table_name} GROUP BY studytime ORDER BY studytime", conn)
+    where_clause, params = build_where_clause(filters)
+    df = pd.read_sql(f"SELECT studytime, AVG(G3) as avg_G3 FROM {table_name}{where_clause} GROUP BY studytime ORDER BY studytime", conn, params=params)
     conn.close()
     return df.to_dict(orient="records")
 
-def get_internet_vs_grade(table_name: str):
+def get_internet_vs_grade(table_name: str, filters: dict = None):
     conn = get_db_connection()
-    df = pd.read_sql(f"SELECT internet, AVG(G3) as avg_G3 FROM {table_name} GROUP BY internet", conn)
+    where_clause, params = build_where_clause(filters)
+    df = pd.read_sql(f"SELECT internet, AVG(G3) as avg_G3 FROM {table_name}{where_clause} GROUP BY internet", conn, params=params)
     conn.close()
     return df.to_dict(orient="records")
 
-def get_absences_vs_grade(table_name: str):
+def get_absences_vs_grade(table_name: str, filters: dict = None):
     conn = get_db_connection()
-    df = pd.read_sql(f"SELECT absences, G3 FROM {table_name}", conn)
+    where_clause, params = build_where_clause(filters)
+    df = pd.read_sql(f"SELECT absences, G3 FROM {table_name}{where_clause}", conn, params=params)
     conn.close()
     return df.to_dict(orient="records")
 
-def get_parent_education_vs_grade(table_name: str):
+def get_parent_education_vs_grade(table_name: str, filters: dict = None):
     conn = get_db_connection()
-    df = pd.read_sql(f"SELECT Medu, AVG(G3) as avg_G3 FROM {table_name} GROUP BY Medu ORDER BY Medu", conn)
+    where_clause, params = build_where_clause(filters)
+    df = pd.read_sql(f"SELECT Medu, AVG(G3) as avg_G3 FROM {table_name}{where_clause} GROUP BY Medu ORDER BY Medu", conn, params=params)
     conn.close()
     return df.to_dict(orient="records")

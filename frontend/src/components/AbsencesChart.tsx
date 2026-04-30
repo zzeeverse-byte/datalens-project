@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { getChartData } from '../services/api';
 
-export const AbsencesChart: React.FC<{ tableName: string }> = ({ tableName }) => {
+export const AbsencesChart: React.FC<{ tableName: string, filters?: any }> = ({ tableName, filters = {} }) => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        getChartData('absences-vs-grade', tableName).then(res => {
+        getChartData('absences-vs-grade', tableName, filters).then(res => {
             if (res.status === 'success') setData(res.data);
         });
-    }, [tableName]);
+    }, [tableName, filters]);
 
     return (
         <div className="bg-white p-4 rounded-lg shadow-md h-80">

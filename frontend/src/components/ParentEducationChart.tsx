@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { getChartData } from '../services/api';
 
-export const ParentEducationChart: React.FC<{ tableName: string }> = ({ tableName }) => {
+export const ParentEducationChart: React.FC<{ tableName: string, filters?: any }> = ({ tableName, filters = {} }) => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        getChartData('parent-education-vs-grade', tableName).then(res => {
+        getChartData('parent-education-vs-grade', tableName, filters).then(res => {
             if (res.status === 'success') setData(res.data);
         });
-    }, [tableName]);
+    }, [tableName, filters]);
 
     return (
         <div className="bg-white p-4 rounded-lg shadow-md h-80">

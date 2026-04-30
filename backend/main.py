@@ -1,4 +1,5 @@
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, Query
+from typing import Optional
 from backend.csv_service import parse_csv, store_csv_in_sqlite
 from backend.data_service import (
     profile_dataframe,
@@ -62,21 +63,26 @@ def get_profile(table_name: str):
         return {"status": "error", "message": str(e)}
 
 @app.get("/api/charts/grade-by-school")
-def api_grade_by_school(table_name: str):
-    return {"status": "success", "data": get_avg_grade_by_school(table_name)}
+def api_grade_by_school(table_name: str, school: Optional[str] = None, sex: Optional[str] = None, internet: Optional[str] = None):
+    filters = {k: v for k, v in {"school": school, "sex": sex, "internet": internet}.items() if v is not None}
+    return {"status": "success", "data": get_avg_grade_by_school(table_name, filters)}
 
 @app.get("/api/charts/studytime-vs-grade")
-def api_studytime_vs_grade(table_name: str):
-    return {"status": "success", "data": get_studytime_vs_grade(table_name)}
+def api_studytime_vs_grade(table_name: str, school: Optional[str] = None, sex: Optional[str] = None, internet: Optional[str] = None):
+    filters = {k: v for k, v in {"school": school, "sex": sex, "internet": internet}.items() if v is not None}
+    return {"status": "success", "data": get_studytime_vs_grade(table_name, filters)}
 
 @app.get("/api/charts/internet-vs-grade")
-def api_internet_vs_grade(table_name: str):
-    return {"status": "success", "data": get_internet_vs_grade(table_name)}
+def api_internet_vs_grade(table_name: str, school: Optional[str] = None, sex: Optional[str] = None, internet: Optional[str] = None):
+    filters = {k: v for k, v in {"school": school, "sex": sex, "internet": internet}.items() if v is not None}
+    return {"status": "success", "data": get_internet_vs_grade(table_name, filters)}
 
 @app.get("/api/charts/absences-vs-grade")
-def api_absences_vs_grade(table_name: str):
-    return {"status": "success", "data": get_absences_vs_grade(table_name)}
+def api_absences_vs_grade(table_name: str, school: Optional[str] = None, sex: Optional[str] = None, internet: Optional[str] = None):
+    filters = {k: v for k, v in {"school": school, "sex": sex, "internet": internet}.items() if v is not None}
+    return {"status": "success", "data": get_absences_vs_grade(table_name, filters)}
 
 @app.get("/api/charts/parent-education-vs-grade")
-def api_parent_education_vs_grade(table_name: str):
-    return {"status": "success", "data": get_parent_education_vs_grade(table_name)}
+def api_parent_education_vs_grade(table_name: str, school: Optional[str] = None, sex: Optional[str] = None, internet: Optional[str] = None):
+    filters = {k: v for k, v in {"school": school, "sex": sex, "internet": internet}.items() if v is not None}
+    return {"status": "success", "data": get_parent_education_vs_grade(table_name, filters)}
