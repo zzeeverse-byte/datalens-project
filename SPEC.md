@@ -1,27 +1,34 @@
 # Spec: DataLens
 
 ## Objective
-We are building a full-stack web application called DataLens to analyze and visualize student performance data based on the `student-mat.csv` dataset. The application will answer five specific analytical questions:
+We are building a full-stack web application called DataLens to analyze and visualize data from uploaded CSV files. The application will answer five specific analytical questions when a dataset like `student-mat.csv` is uploaded:
 1. What is the average final grade by school?
 2. How does study time correlate with final grade (G3)?
 3. Do students with internet access perform better?
 4. What is the relationship between absences and grades?
 5. How do parent education levels affect student performance?
 
+## Key Features
+- **Dynamic CSV Upload**: The app must accept any CSV upload, not just `student-mat.csv`.
+- **Database**: SQLite is used as the database for storing uploaded CSV data.
+- **LLM Chat Interface**: An AI chat feature using the Gemini API with tool-calling, allowing users to ask questions about their data in plain English.
+- **Executive Summary**: The LLM generates a written narrative of key patterns and insights found in the uploaded data.
+
 ## Tech Stack
 - **Frontend**: React (via Vite), TypeScript, TailwindCSS for styling, Recharts (or Chart.js) for data visualization.
-- **Backend**: FastAPI (Python), Pandas for data processing.
-- **Data Source**: `student-mat.csv` (Note: Uses semicolons `;` as separators).
+- **Backend**: FastAPI (Python), Pandas for data processing, SQLite for database storage.
+- **AI/LLM**: Gemini API.
+- **Data Source**: Any uploaded CSV file.
 
 ## Commands
-- **Frontend**:
+- **Frontend** (Runs on port 5173):
   - Install dependencies: `npm install`
-  - Dev: `npm run dev`
+  - Dev: `npm run dev -- --port 5173`
   - Build: `npm run build`
   - Lint: `npm run lint`
-- **Backend**:
+- **Backend** (Runs on port 8000):
   - Install dependencies: `pip install -r requirements.txt`
-  - Dev: `uvicorn main:app --reload`
+  - Dev: `uvicorn main:app --reload --port 8000`
   - Test: `pytest`
 
 ## Project Structure
@@ -76,7 +83,7 @@ def load_data() -> pd.DataFrame:
 
 ## Testing Strategy
 - **Backend**: `pytest` for testing the Pandas data aggregation logic and FastAPI endpoints.
-- **Frontend**: React Testing Library for component rendering tests.
+- **Frontend**: Vitest for component and logic testing.
 - **Coverage**: Aim for 80% coverage on backend data processing logic.
 
 ## Boundaries
@@ -95,5 +102,4 @@ ASSUMPTIONS I'M MAKING:
 1. We will use Vite with React + TypeScript for the frontend.
 2. We will use TailwindCSS for styling and Recharts for charts.
 3. The backend will use Pandas for data manipulation.
-4. The `student-mat.csv` is static and won't be updated by users.
 → Are these assumptions correct? Should we use different libraries for charts or styling?
