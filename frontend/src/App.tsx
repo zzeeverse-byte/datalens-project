@@ -3,6 +3,7 @@ import { UploadZone } from './components/UploadZone'
 import { ProfilePanel } from './components/ProfilePanel'
 import { Dashboard } from './components/Dashboard'
 import { FilterPanel } from './components/FilterPanel'
+import { ChatPanel } from './components/ChatPanel'
 import './index.css'
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
             <ProfilePanel tableName={tableName} />
             <FilterPanel filters={filters} setFilters={setFilters} />
             <Dashboard tableName={tableName} filters={filters} />
+            <ChatPanel tableName={tableName} />
           </>
         )}
       </div>

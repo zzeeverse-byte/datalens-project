@@ -1,6 +1,8 @@
 from fastapi import FastAPI, UploadFile, File, Query
 from typing import Optional
 from backend.csv_service import parse_csv, store_csv_in_sqlite
+from backend.chat_service import chat_with_data
+from backend.models import ChatRequest
 from backend.data_service import (
     profile_dataframe,
     get_avg_grade_by_school,
@@ -60,6 +62,14 @@ def get_profile(table_name: str):
         return profile
     except Exception as e:
         conn.close()
+        return {"status": "error", "message": str(e)}
+
+@app.post("/api/chat")
+def api_chat(req: ChatRequest):
+    try:
+        response_text = chat_with_data(req.message, req.table_name)
+        return {"status": "success", "response": response_text}
+    except Exception as e:
         return {"status": "error", "message": str(e)}
 
 @app.get("/api/charts/grade-by-school")
