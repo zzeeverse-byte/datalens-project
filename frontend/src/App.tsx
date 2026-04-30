@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { UploadZone } from './components/UploadZone'
 import { ProfilePanel } from './components/ProfilePanel'
+import { Dashboard } from './components/Dashboard'
 import './index.css'
 
 function App() {
@@ -11,7 +12,12 @@ function App() {
       <div className="max-w-7xl mx-auto">
         <h1 className="text-4xl font-bold text-center text-blue-600 mb-8">DataLens</h1>
         <UploadZone onUploadSuccess={setTableName} />
-        {tableName && <ProfilePanel tableName={tableName} />}
+        {tableName && (
+          <>
+            <ProfilePanel tableName={tableName} />
+            <Dashboard tableName={tableName} />
+          </>
+        )}
       </div>
     </div>
   )

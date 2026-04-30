@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from backend.database import get_db_connection
 
 def profile_dataframe(df: pd.DataFrame) -> dict:
     profile = {}
@@ -38,3 +39,33 @@ def profile_dataframe(df: pd.DataFrame) -> dict:
         profile[col] = col_info
         
     return profile
+
+def get_avg_grade_by_school(table_name: str):
+    conn = get_db_connection()
+    df = pd.read_sql(f"SELECT school, AVG(G3) as avg_G3 FROM {table_name} GROUP BY school", conn)
+    conn.close()
+    return df.to_dict(orient="records")
+
+def get_studytime_vs_grade(table_name: str):
+    conn = get_db_connection()
+    df = pd.read_sql(f"SELECT studytime, AVG(G3) as avg_G3 FROM {table_name} GROUP BY studytime ORDER BY studytime", conn)
+    conn.close()
+    return df.to_dict(orient="records")
+
+def get_internet_vs_grade(table_name: str):
+    conn = get_db_connection()
+    df = pd.read_sql(f"SELECT internet, AVG(G3) as avg_G3 FROM {table_name} GROUP BY internet", conn)
+    conn.close()
+    return df.to_dict(orient="records")
+
+def get_absences_vs_grade(table_name: str):
+    conn = get_db_connection()
+    df = pd.read_sql(f"SELECT absences, G3 FROM {table_name}", conn)
+    conn.close()
+    return df.to_dict(orient="records")
+
+def get_parent_education_vs_grade(table_name: str):
+    conn = get_db_connection()
+    df = pd.read_sql(f"SELECT Medu, AVG(G3) as avg_G3 FROM {table_name} GROUP BY Medu ORDER BY Medu", conn)
+    conn.close()
+    return df.to_dict(orient="records")

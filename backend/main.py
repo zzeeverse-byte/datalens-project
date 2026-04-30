@@ -1,6 +1,13 @@
 from fastapi import FastAPI, UploadFile, File
 from backend.csv_service import parse_csv, store_csv_in_sqlite
-from backend.data_service import profile_dataframe
+from backend.data_service import (
+    profile_dataframe,
+    get_avg_grade_by_school,
+    get_studytime_vs_grade,
+    get_internet_vs_grade,
+    get_absences_vs_grade,
+    get_parent_education_vs_grade
+)
 from backend.database import get_db_connection
 import pandas as pd
 import tempfile
@@ -53,3 +60,23 @@ def get_profile(table_name: str):
     except Exception as e:
         conn.close()
         return {"status": "error", "message": str(e)}
+
+@app.get("/api/charts/grade-by-school")
+def api_grade_by_school(table_name: str):
+    return {"status": "success", "data": get_avg_grade_by_school(table_name)}
+
+@app.get("/api/charts/studytime-vs-grade")
+def api_studytime_vs_grade(table_name: str):
+    return {"status": "success", "data": get_studytime_vs_grade(table_name)}
+
+@app.get("/api/charts/internet-vs-grade")
+def api_internet_vs_grade(table_name: str):
+    return {"status": "success", "data": get_internet_vs_grade(table_name)}
+
+@app.get("/api/charts/absences-vs-grade")
+def api_absences_vs_grade(table_name: str):
+    return {"status": "success", "data": get_absences_vs_grade(table_name)}
+
+@app.get("/api/charts/parent-education-vs-grade")
+def api_parent_education_vs_grade(table_name: str):
+    return {"status": "success", "data": get_parent_education_vs_grade(table_name)}

@@ -21,3 +21,10 @@ export const getProfile = async (tableName: string) => {
     });
     return response.data;
 };
+
+export const getChartData = async (endpoint: string, tableName: string) => {
+    const response = await axios.get(`${API_BASE_URL}/charts/${endpoint}`, {
+        params: { table_name: tableName }
+    });
+    return response.data;
+};
