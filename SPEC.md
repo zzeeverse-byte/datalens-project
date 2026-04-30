@@ -1,105 +1,69 @@
 # Spec: DataLens
 
 ## Objective
-We are building a full-stack web application called DataLens to analyze and visualize data from uploaded CSV files. The application will answer five specific analytical questions when a dataset like `student-mat.csv` is uploaded:
-1. What is the average final grade by school?
-2. How does study time correlate with final grade (G3)?
-3. Do students with internet access perform better?
-4. What is the relationship between absences and grades?
-5. How do parent education levels affect student performance?
+The app is called DataLens. It is a full-stack web application that lets users upload ANY CSV file and get automated data profiling, interactive visualizations, an AI chat interface, and an executive summary. It is developed against student-mat.csv but must work with any CSV.
 
-## Key Features
-- **Dynamic CSV Upload**: The app must accept any CSV upload, not just `student-mat.csv`.
-- **Database**: SQLite is used as the database for storing uploaded CSV data.
-- **LLM Chat Interface**: An AI chat feature using the Gemini API with tool-calling, allowing users to ask questions about their data in plain English.
-- **Executive Summary**: The LLM generates a written narrative of key patterns and insights found in the uploaded data.
+The 5 chat questions for the student dataset are:
+- What is the average final grade by school?
+- How does study time correlate with final grade G3?
+- Do students with internet access perform better?
+- What is the relationship between absences and grades?
+- How do parent education levels affect student performance?
 
 ## Tech Stack
-- **Frontend**: React (via Vite), TypeScript, TailwindCSS for styling, Recharts (or Chart.js) for data visualization.
-- **Backend**: FastAPI (Python), Pandas for data processing, SQLite for database storage.
-- **AI/LLM**: Gemini API.
-- **Data Source**: Any uploaded CSV file.
+- **Frontend**: React plus Vite, TypeScript, TailwindCSS, Recharts, Vitest (running on port 5173).
+- **Backend**: FastAPI, Python 3.11, Pandas, SQLite, pytest (running on port 8000).
+- **AI/LLM**: Gemini API with tool-calling for the LLM chat feature.
 
 ## Commands
-- **Frontend** (Runs on port 5173):
-  - Install dependencies: `npm install`
-  - Dev: `npm run dev -- --port 5173`
-  - Build: `npm run build`
-  - Lint: `npm run lint`
-- **Backend** (Runs on port 8000):
-  - Install dependencies: `pip install -r requirements.txt`
-  - Dev: `uvicorn main:app --reload --port 8000`
-  - Test: `pytest`
+- **Frontend**: 
+  - `npm install`
+  - `npm run dev`
+  - `npm run test`
+  - `npm run build`
+- **Backend**: 
+  - `pip install -r requirements.txt`
+  - `uvicorn main:app --reload --port 8000`
+  - `pytest`
 
 ## Project Structure
-```text
-datalens-project/
-├── frontend/             → React Vite application
-│   ├── src/
-│   │   ├── components/   → Reusable UI & Chart components
-│   │   ├── pages/        → Page layouts
-│   │   ├── services/     → API clients
-│   │   └── App.tsx       → Main application component
-│   └── package.json
-├── backend/              → FastAPI application
-│   ├── main.py           → API entry point
-│   ├── data_service.py   → Pandas logic for CSV analysis
-│   ├── models.py         → Pydantic models
-│   └── tests/            → Backend tests
-└── student-mat.csv       → Semicolon-separated data file
-```
+- `frontend/`:
+  - `src/`: containing `components`, `pages`, `services`, `App.tsx`.
+- `backend/`: 
+  - `main.py`, `csv_service.py`, `data_service.py`, `chat_service.py`, `models.py`, `database.py`
+  - `tests/` folder
+- `docs/adrs/`: folder for Architecture Decision Records.
+- `.agent/skills/`: folder with the 6 skills.
 
-## Code Style
-### Frontend (React/TS)
-```tsx
-import React from 'react';
-
-interface Props {
-  title: string;
-  data: number[];
-}
-
-export const ChartCard: React.FC<Props> = ({ title, data }) => {
-  return (
-    <div className="p-4 bg-white rounded-lg shadow">
-      <h2 className="text-xl font-bold">{title}</h2>
-      {/* Chart implementation */}
-    </div>
-  );
-};
-```
-
-### Backend (Python)
-```python
-from fastapi import FastAPI
-import pandas as pd
-
-app = FastAPI()
-
-def load_data() -> pd.DataFrame:
-    # Important: CSV uses semicolons as separators
-    return pd.read_csv('../student-mat.csv', sep=';')
-```
-
-## Testing Strategy
-- **Backend**: `pytest` for testing the Pandas data aggregation logic and FastAPI endpoints.
-- **Frontend**: Vitest for component and logic testing.
-- **Coverage**: Aim for 80% coverage on backend data processing logic.
-
-## Boundaries
-- **Always do**: Handle missing or malformed data in the CSV gracefully, ensure proper TypeScript typing for API responses.
-- **Ask first**: Before adding complex third-party dependencies (e.g., heavy state management libraries) or changing the application architecture.
-- **Never do**: Hardcode the CSV path in a way that breaks if the app is run from a different directory; commit large datasets to source control if not required.
+## Key Features
+1. **CSV upload**: drag and drop, stores data in SQLite, validates size up to 50MB.
+2. **Data profiling**: detects column types, computes stats, handles yes/no string columns.
+3. **Dashboard**: at least 4 charts using real SQLite data, auto-selects chart types.
+4. **Global filters**: dropdowns and sliders that update ALL charts simultaneously.
+5. **LLM chat**: Gemini with tool-calling, tools are `query_data`, `get_statistics`, `get_column_values`, answers use real numbers not hallucinated ones.
+6. **Executive summary**: LLM generates written narrative with actual numbers from the data.
 
 ## Success Criteria
-- [ ] Backend provides 5 distinct API endpoints (or one comprehensive endpoint) accurately returning the aggregated data for each of the 5 questions.
-- [ ] Frontend successfully fetches and displays this data using clear, distinct visualizations (e.g., bar charts, scatter plots).
-- [ ] The application correctly parses `student-mat.csv` using the `;` separator.
-- [ ] The application runs locally without errors using the specified dev commands.
+- CSV upload works for any valid CSV and rejects invalid files with clear error.
+- Profiling displays within 2 seconds.
+- Dashboard renders within 2 seconds.
+- Filters update all charts at once.
+- LLM chat correctly answers all 5 sample questions.
+- Executive summary references actual numbers.
+- Data persists after page refresh.
+- App works with a completely different CSV without code changes.
 
-## Open Questions
-ASSUMPTIONS I'M MAKING:
-1. We will use Vite with React + TypeScript for the frontend.
-2. We will use TailwindCSS for styling and Recharts for charts.
-3. The backend will use Pandas for data manipulation.
-→ Are these assumptions correct? Should we use different libraries for charts or styling?
+## Testing Strategy
+- **Backend**: `pytest`
+- **Frontend**: `Vitest`
+- **Coverage**: 80% coverage target.
+- Write tests before code.
+
+## Environment Variables
+- `GEMINI_API_KEY`
+- `LLM_PROVIDER=gemini`
+
+## Boundaries
+- **Always do**: handle missing CSV data gracefully, use TypeScript types, write tests before code, commit after each working feature.
+- **Ask first**: before adding new libraries or changing database schema.
+- **Never do**: hardcode file paths, commit the .env file, use hardcoded data in charts, assume CSV always uses commas.
