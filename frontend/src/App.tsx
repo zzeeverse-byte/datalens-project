@@ -4,6 +4,7 @@ import { ProfilePanel } from './components/ProfilePanel'
 import { Dashboard } from './components/Dashboard'
 import { FilterPanel } from './components/FilterPanel'
 import { ChatPanel } from './components/ChatPanel'
+import { ExecutiveSummary } from './components/ExecutiveSummary'
 import './index.css'
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
             <FilterPanel filters={filters} setFilters={setFilters} />
             <Dashboard tableName={tableName} filters={filters} />
             <ChatPanel tableName={tableName} />
+            <ExecutiveSummary tableName={tableName} />
           </>
         )}
       </div>

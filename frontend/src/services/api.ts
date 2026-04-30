@@ -37,3 +37,11 @@ export const sendChatMessage = async (message: string, tableName: string) => {
     return response.data;
 };
 
+export const generateSummary = async (tableName: string) => {
+    const response = await axios.post(`${API_BASE_URL}/summary`, {
+        table_name: tableName
+    });
+    return response.data;
+};
+
+

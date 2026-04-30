@@ -12,3 +12,6 @@ class ApiResponse(BaseModel):
 class ChatRequest(BaseModel):
     message: str
     table_name: str
+
+class SummaryRequest(BaseModel):
+    table_name: str
