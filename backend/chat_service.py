@@ -67,7 +67,7 @@ def chat_with_data(message: str, table_name: str) -> str:
     )
     
     model = genai.GenerativeModel(
-        model_name='gemini-1.5-flash',
+        model_name='gemini-2.5-flash',
         tools=[query_data, get_statistics, get_column_values],
         system_instruction=system_instruction
     )
@@ -98,9 +98,10 @@ def generate_executive_summary(table_name: str) -> str:
             f"Profile:\n{profile_json}"
         )
         
-        model = genai.GenerativeModel('gemini-1.5-flash')
+        model = genai.GenerativeModel('gemini-2.5-flash')
         response = model.generate_content(prompt)
         return response.text
     except Exception as e:
         return f"Error generating summary: {str(e)}"
+
 

@@ -1,13 +1,16 @@
 from fastapi.testclient import TestClient
 from backend.main import app
 import os
+from unittest.mock import patch
 
 client = TestClient(app)
 
-def test_chat():
-    if not os.getenv("GEMINI_API_KEY"):
-        print("Skipping chat test because GEMINI_API_KEY is not set.")
-        return
+@patch('backend.chat_service.genai.GenerativeModel')
+def test_chat(mock_model):
+    mock_instance = mock_model.return_value
+    mock_chat = mock_instance.start_chat.return_value
+    mock_response = mock_chat.send_message.return_value
+    mock_response.text = "The average grade for school GP is 15."
 
     # 1. Upload CSV
     file_path = os.path.join(os.path.dirname(__file__), "..", "..", "student-mat.csv")

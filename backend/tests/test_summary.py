@@ -1,18 +1,21 @@
 from fastapi.testclient import TestClient
 from backend.main import app
 import os
+from unittest.mock import patch
 
 client = TestClient(app)
 
-def test_summary():
-    if not os.getenv("GEMINI_API_KEY"):
-        print("Skipping summary test because GEMINI_API_KEY is not set.")
-        return
+@patch('backend.chat_service.genai.GenerativeModel')
+def test_summary(mock_model):
+    mock_instance = mock_model.return_value
+    mock_response = mock_instance.generate_content.return_value
+    mock_response.text = "This dataset contains an average grade of 12 across 395 students in the GP school."
 
     # 1. Upload CSV
     file_path = os.path.join(os.path.dirname(__file__), "..", "..", "student-mat.csv")
     with open(file_path, "rb") as f:
         upload_resp = client.post("/api/upload", files={"file": ("student-mat.csv", f, "text/csv")})
+
     
     assert upload_resp.status_code == 200
     table_name = upload_resp.json()["table_name"]
