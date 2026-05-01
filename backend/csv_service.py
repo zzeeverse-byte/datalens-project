@@ -1,5 +1,5 @@
 import pandas as pd
-from backend.database import get_db_connection
+from database import get_db_connection
 
 def parse_csv(file_path: str) -> pd.DataFrame:
     # Use sep=None and engine='python' to auto-detect separator

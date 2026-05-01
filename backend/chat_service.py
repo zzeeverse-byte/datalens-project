@@ -3,8 +3,8 @@ import pandas as pd
 import google.generativeai as genai
 import json
 from dotenv import load_dotenv
-from backend.database import get_db_connection
-from backend.data_service import profile_dataframe
+from database import get_db_connection
+from data_service import profile_dataframe
 
 load_dotenv()
 

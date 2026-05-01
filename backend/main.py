@@ -1,9 +1,9 @@
 from fastapi import FastAPI, UploadFile, File, Query
 from typing import Optional
-from backend.csv_service import parse_csv, store_csv_in_sqlite
-from backend.chat_service import chat_with_data, generate_executive_summary
-from backend.models import ChatRequest, SummaryRequest
-from backend.data_service import (
+from csv_service import parse_csv, store_csv_in_sqlite
+from chat_service import chat_with_data, generate_executive_summary
+from models import ChatRequest, SummaryRequest
+from data_service import (
     profile_dataframe,
     get_avg_grade_by_school,
     get_studytime_vs_grade,
@@ -11,7 +11,7 @@ from backend.data_service import (
     get_absences_vs_grade,
     get_parent_education_vs_grade
 )
-from backend.database import get_db_connection
+from database import get_db_connection
 import pandas as pd
 import tempfile
 import os

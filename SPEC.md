@@ -67,3 +67,4 @@ The 5 chat questions for the student dataset are:
 - **Always do**: handle missing CSV data gracefully, use TypeScript types, write tests before code, commit after each working feature.
 - **Ask first**: before adding new libraries or changing database schema.
 - **Never do**: hardcode file paths, commit the .env file, use hardcoded data in charts, assume CSV always uses commas.
+

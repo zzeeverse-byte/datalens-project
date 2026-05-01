@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from backend.database import get_db_connection
+from database import get_db_connection
 
 def profile_dataframe(df: pd.DataFrame) -> dict:
     profile = {}

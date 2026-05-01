@@ -30,7 +30,7 @@ A comprehensive full-stack analytics dashboard for exploring datasets, running n
    Navigate into the `backend` folder and run the FastAPI server:
    ```bash
    cd backend
-   uvicorn main:app --reload
+   python -m uvicorn main:app --reload
    ```
 2. **Start the Frontend:**
    In a new terminal window, navigate into the `frontend` folder and run the Vite development server:
@@ -44,7 +44,7 @@ A comprehensive full-stack analytics dashboard for exploring datasets, running n
 - **Backend Tests:** Run the pytest suite inside the `backend` folder:
   ```bash
   cd backend
-  pytest
+  python -m pytest tests/ -v
   ```
 - **Frontend Tests:** Run the vitest suite inside the `frontend` folder:
   ```bash
