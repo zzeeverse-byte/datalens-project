@@ -12,6 +12,24 @@ api_key = os.getenv("GEMINI_API_KEY")
 if api_key:
     genai.configure(api_key=api_key)
 
+def _convert_to_native(obj):
+    if pd.isna(obj):
+        return None
+    if hasattr(obj, 'item'):
+        obj = obj.item()
+    if isinstance(obj, (int, pd.core.dtypes.generic.ABCSeries, pd.core.dtypes.generic.ABCIndex)):
+        # Just in case, to avoid checking Series/Index
+        pass
+    if isinstance(obj, int) and not isinstance(obj, bool):
+        return int(obj)
+    if isinstance(obj, float):
+        return float(obj)
+    if isinstance(obj, dict):
+        return {str(k): _convert_to_native(v) for k, v in obj.items()}
+    if isinstance(obj, list):
+        return [_convert_to_native(v) for v in obj]
+    return obj
+
 def query_data(query: str) -> list:
     """Runs a SQL SELECT query against the SQLite database and returns the results as a list of dictionaries."""
     conn = get_db_connection()
@@ -21,7 +39,8 @@ def query_data(query: str) -> list:
             return [{"error": "Only SELECT queries are allowed."}]
         df = pd.read_sql(query, conn)
         conn.close()
-        return df.to_dict(orient="records")
+        records = df.to_dict(orient="records")
+        return _convert_to_native(records)
     except Exception as e:
         conn.close()
         return [{"error": str(e)}]
@@ -32,17 +51,18 @@ def get_statistics(column: str, table_name: str) -> dict:
     try:
         df = pd.read_sql(f"SELECT {column} FROM {table_name}", conn)
         conn.close()
+        unique_counts = _convert_to_native(df[column].value_counts().to_dict())
         if pd.api.types.is_numeric_dtype(df[column]) and not pd.api.types.is_bool_dtype(df[column]):
             return {
                 "min": float(df[column].min()) if not pd.isna(df[column].min()) else None,
                 "max": float(df[column].max()) if not pd.isna(df[column].max()) else None,
                 "mean": float(df[column].mean()) if not pd.isna(df[column].mean()) else None,
                 "median": float(df[column].median()) if not pd.isna(df[column].median()) else None,
-                "unique_counts": df[column].value_counts().to_dict()
+                "unique_counts": unique_counts
             }
         else:
             return {
-                "unique_counts": df[column].value_counts().to_dict()
+                "unique_counts": unique_counts
             }
     except Exception as e:
         conn.close()
