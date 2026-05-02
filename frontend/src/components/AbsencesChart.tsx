@@ -12,8 +12,8 @@ export const AbsencesChart: React.FC<{ tableName: string, filters?: any }> = ({ 
     }, [tableName, filters]);
 
     return (
-        <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm h-[400px] flex flex-col">
-            <h3 className="text-base font-bold text-slate-700 mb-6">Absences vs Grade</h3>
+        <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '0.75rem', border: '1px solid #e2e8f0', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)', height: '300px', display: 'flex', flexDirection: 'column' }}>
+            <h3 style={{ fontSize: '1rem', fontWeight: 'bold', color: '#334155', marginBottom: '1.5rem', textAlign: 'center' }}>Absences vs Grade</h3>
             <ResponsiveContainer width="100%" height="100%">
                 <ScatterChart margin={{ top: 5, right: 30, left: 20, bottom: 25 }}>
                     <CartesianGrid strokeDasharray="3 3" />

@@ -12,17 +12,15 @@ function App() {
   const [filters, setFilters] = useState<any>({});
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans text-slate-900">
-      <header className="bg-slate-900 shadow-md">
-        <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold text-white tracking-tight">DataLens</h1>
-        </div>
+    <div style={{ minHeight: '100vh', backgroundColor: '#f1f5f9', color: '#1e293b' }}>
+      <header style={{ backgroundColor: '#1e293b', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)', padding: '1.5rem 2rem' }}>
+        <h1 style={{ fontSize: '1.875rem', fontWeight: 'bold', color: 'white', margin: 0 }}>DataLens</h1>
       </header>
-      <main className="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
-        <div className="bg-white shadow-xl rounded-2xl p-8 border border-slate-100 min-h-[500px]">
+      <main style={{ maxWidth: '1280px', margin: '0 auto', padding: '2.5rem 2rem' }}>
+        <div style={{ backgroundColor: 'white', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)', borderRadius: '1rem', padding: '2rem', minHeight: '500px' }}>
           <UploadZone onUploadSuccess={setTableName} />
           {tableName && (
-            <div className="mt-10 space-y-12">
+            <div style={{ marginTop: '2.5rem', display: 'flex', flexDirection: 'column', gap: '3rem' }}>
               <ProfilePanel tableName={tableName} />
               <FilterPanel filters={filters} setFilters={setFilters} />
               <Dashboard tableName={tableName} filters={filters} />

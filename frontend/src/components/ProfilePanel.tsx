@@ -38,52 +38,48 @@ export const ProfilePanel: React.FC<ProfilePanelProps> = ({ tableName }) => {
 
     return (
     return (
-        <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
-            <div className="bg-slate-50 border-b border-slate-200 px-6 py-4">
-                <h2 className="text-xl font-semibold text-slate-800 flex items-center">
-                    <svg className="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
-                    </svg>
-                    Data Profile: <span className="font-mono text-blue-600 ml-2">{tableName}</span>
+        <div style={{ backgroundColor: 'white', border: '1px solid #e2e8f0', borderRadius: '0.5rem', overflow: 'hidden' }}>
+            <div style={{ backgroundColor: '#f8fafc', padding: '1rem 1.5rem', borderBottom: '1px solid #e2e8f0' }}>
+                <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#1e293b', margin: 0 }}>
+                    📊 Data Profile: <span style={{ fontFamily: 'monospace', color: '#2563eb' }}>{tableName}</span>
                 </h2>
             </div>
-            <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-slate-200">
-                    <thead className="bg-slate-50">
+            <div style={{ overflowX: 'auto' }}>
+                <table style={{ minWidth: '100%', borderCollapse: 'collapse' }}>
+                    <thead style={{ backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
                         <tr>
-                            <th className="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Column</th>
-                            <th className="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Type</th>
-                            <th className="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Details</th>
+                            <th style={{ padding: '0.75rem 1.5rem', textAlign: 'left', fontSize: '0.875rem', fontWeight: 'bold', color: '#64748b', textTransform: 'uppercase' }}>Column</th>
+                            <th style={{ padding: '0.75rem 1.5rem', textAlign: 'left', fontSize: '0.875rem', fontWeight: 'bold', color: '#64748b', textTransform: 'uppercase' }}>Type</th>
+                            <th style={{ padding: '0.75rem 1.5rem', textAlign: 'left', fontSize: '0.875rem', fontWeight: 'bold', color: '#64748b', textTransform: 'uppercase' }}>Details</th>
                         </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-slate-100">
-                        {Object.entries(profileData).map(([colName, info]: [string, any]) => (
-                            <tr key={colName} className="hover:bg-slate-50/50 transition-colors even:bg-slate-50/30">
-                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">{colName}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
-                                    <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                                        info.type === 'numeric' ? 'bg-blue-100 text-blue-700 border border-blue-200' :
-                                        info.type === 'boolean' ? 'bg-emerald-100 text-emerald-700 border border-emerald-200' :
-                                        'bg-purple-100 text-purple-700 border border-purple-200'
-                                    }`}>
+                    <tbody>
+                        {Object.entries(profileData).map(([colName, info]: [string, any], index: number) => (
+                            <tr key={colName} style={{ backgroundColor: index % 2 === 0 ? 'white' : '#f1f5f9', borderBottom: '1px solid #e2e8f0' }}>
+                                <td style={{ padding: '1rem 1.5rem', fontSize: '0.875rem', fontWeight: 'bold', color: '#0f172a' }}>{colName}</td>
+                                <td style={{ padding: '1rem 1.5rem', fontSize: '0.875rem' }}>
+                                    <span style={{
+                                        fontWeight: 'bold',
+                                        color: info.type === 'numeric' ? '#2563eb' : info.type === 'boolean' ? '#16a34a' : '#ea580c'
+                                    }}>
                                         {info.type}
                                     </span>
                                 </td>
-                                <td className="px-6 py-4 text-sm text-slate-600">
+                                <td style={{ padding: '1rem 1.5rem', fontSize: '0.875rem', color: '#475569' }}>
                                     {info.type === 'numeric' && (
-                                        <div className="flex gap-6">
-                                            <span className="flex flex-col"><span className="text-xs text-slate-400 uppercase tracking-wider font-semibold">Min</span> <span>{info.min?.toFixed(2) ?? info.min}</span></span>
-                                            <span className="flex flex-col"><span className="text-xs text-slate-400 uppercase tracking-wider font-semibold">Max</span> <span>{info.max?.toFixed(2) ?? info.max}</span></span>
-                                            <span className="flex flex-col"><span className="text-xs text-slate-400 uppercase tracking-wider font-semibold">Mean</span> <span>{info.mean?.toFixed(2)}</span></span>
-                                            <span className="flex flex-col"><span className="text-xs text-slate-400 uppercase tracking-wider font-semibold">Median</span> <span>{info.median?.toFixed(2)}</span></span>
+                                        <div style={{ display: 'flex', gap: '1.5rem' }}>
+                                            <span style={{ display: 'flex', flexDirection: 'column' }}><span style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 'bold' }}>Min</span> <span>{info.min?.toFixed(2) ?? info.min}</span></span>
+                                            <span style={{ display: 'flex', flexDirection: 'column' }}><span style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 'bold' }}>Max</span> <span>{info.max?.toFixed(2) ?? info.max}</span></span>
+                                            <span style={{ display: 'flex', flexDirection: 'column' }}><span style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 'bold' }}>Mean</span> <span>{info.mean?.toFixed(2)}</span></span>
+                                            <span style={{ display: 'flex', flexDirection: 'column' }}><span style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 'bold' }}>Median</span> <span>{info.median?.toFixed(2)}</span></span>
                                         </div>
                                     )}
                                     {(info.type === 'categorical' || info.type === 'boolean') && info.counts && (
-                                        <div className="flex flex-wrap gap-2">
+                                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
                                             {Object.entries(info.counts).map(([val, count]) => (
-                                                <span key={val} className="bg-white px-2.5 py-1 rounded-md text-xs border border-slate-200 shadow-sm flex items-center gap-2">
-                                                    <span className="font-medium text-slate-700">{val === '' || val === 'null' ? 'Empty' : val}</span>
-                                                    <span className="text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded text-[10px]">{String(count)}</span>
+                                                <span key={val} style={{ backgroundColor: 'white', padding: '4px 8px', borderRadius: '4px', border: '1px solid #e2e8f0', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                    <span style={{ fontWeight: 'bold', color: '#334155' }}>{val === '' || val === 'null' ? 'Empty' : val}</span>
+                                                    <span style={{ color: '#94a3b8', backgroundColor: '#f1f5f9', padding: '2px 6px', borderRadius: '4px', fontSize: '10px' }}>{String(count)}</span>
                                                 </span>
                                             ))}
                                         </div>

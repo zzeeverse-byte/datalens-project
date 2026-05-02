@@ -28,54 +28,38 @@ export const ExecutiveSummary: React.FC<ExecutiveSummaryProps> = ({ tableName })
     };
 
     return (
-        <div className="bg-sky-50 p-8 rounded-2xl shadow-sm border border-sky-100 mt-8">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-                <div className="flex items-center">
-                    <div className="p-2 bg-blue-100 rounded-lg text-blue-600 mr-4">
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                    </div>
-                    <div>
-                        <h2 className="text-2xl font-bold text-slate-800 tracking-tight">Executive Summary</h2>
-                        <p className="text-slate-500 text-sm mt-1">AI-generated insights and recommendations based on your data</p>
-                    </div>
+        <div style={{ backgroundColor: 'white', padding: '2rem', borderRadius: '1rem', border: '1px solid #e2e8f0', marginTop: '2rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+                <div>
+                    <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#1e293b', margin: 0 }}>Executive Summary</h2>
+                    <p style={{ color: '#64748b', fontSize: '0.875rem', marginTop: '0.25rem' }}>AI-generated insights and recommendations based on your data</p>
                 </div>
                 
                 {!summary && !loading && (
                     <button 
                         onClick={handleGenerate}
-                        className="bg-blue-600 text-white px-6 py-2.5 rounded-full hover:bg-blue-700 hover:shadow-md transition-all font-medium flex items-center"
+                        style={{ backgroundColor: '#2563eb', color: 'white', padding: '0.75rem 1.5rem', borderRadius: '2rem', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}
                     >
-                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                        </svg>
                         Generate Insights
                     </button>
                 )}
             </div>
             
             {loading && (
-                <div className="flex items-center justify-center p-12 bg-white rounded-xl border border-sky-100/50 shadow-sm">
-                    <div className="flex flex-col items-center">
-                        <div className="animate-spin rounded-full h-10 w-10 border-4 border-slate-100 border-t-blue-600 mb-4"></div>
-                        <span className="text-slate-600 font-medium animate-pulse">Analyzing dataset and generating summary...</span>
-                    </div>
+                <div style={{ textAlign: 'center', padding: '3rem', color: '#475569' }}>
+                    <p style={{ fontWeight: 'bold' }}>Analyzing dataset and generating summary...</p>
                 </div>
             )}
             
             {error && (
-                <div className="text-red-700 bg-red-50 p-4 rounded-xl border border-red-200 flex items-center shadow-sm">
-                    <svg className="w-5 h-5 mr-3 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+                <div style={{ backgroundColor: '#fee2e2', color: '#991b1b', padding: '1rem', borderRadius: '0.5rem', border: '1px solid #fecaca' }}>
                     {error}
                 </div>
             )}
             
             {summary && (
-                <div className="prose prose-slate max-w-none bg-white p-8 rounded-xl border border-sky-100 shadow-sm">
-                    <div className="whitespace-pre-wrap leading-relaxed text-slate-700">
+                <div style={{ backgroundColor: '#e0f2fe', padding: '2rem', borderRadius: '0.5rem', border: '1px solid #bae6fd' }}>
+                    <div style={{ whiteSpace: 'pre-wrap', lineHeight: 1.6, color: '#334155' }}>
                         {summary}
                     </div>
                 </div>
