@@ -37,7 +37,6 @@ export const ProfilePanel: React.FC<ProfilePanelProps> = ({ tableName }) => {
     if (!profileData) return null;
 
     return (
-    return (
         <div style={{ backgroundColor: 'white', border: '1px solid #e2e8f0', borderRadius: '0.5rem', overflow: 'hidden' }}>
             <div style={{ backgroundColor: '#f8fafc', padding: '1rem 1.5rem', borderBottom: '1px solid #e2e8f0' }}>
                 <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#1e293b', margin: 0 }}>
