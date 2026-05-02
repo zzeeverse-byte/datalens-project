@@ -12,20 +12,26 @@ function App() {
   const [filters, setFilters] = useState<any>({});
 
   return (
-    <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold text-center text-blue-600 mb-8">DataLens</h1>
-        <UploadZone onUploadSuccess={setTableName} />
-        {tableName && (
-          <>
-            <ProfilePanel tableName={tableName} />
-            <FilterPanel filters={filters} setFilters={setFilters} />
-            <Dashboard tableName={tableName} filters={filters} />
-            <ChatPanel tableName={tableName} />
-            <ExecutiveSummary tableName={tableName} />
-          </>
-        )}
-      </div>
+    <div className="min-h-screen bg-slate-50 font-sans text-slate-900">
+      <header className="bg-slate-900 shadow-md">
+        <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+          <h1 className="text-3xl font-bold text-white tracking-tight">DataLens</h1>
+        </div>
+      </header>
+      <main className="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
+        <div className="bg-white shadow-xl rounded-2xl p-8 border border-slate-100 min-h-[500px]">
+          <UploadZone onUploadSuccess={setTableName} />
+          {tableName && (
+            <div className="mt-10 space-y-12">
+              <ProfilePanel tableName={tableName} />
+              <FilterPanel filters={filters} setFilters={setFilters} />
+              <Dashboard tableName={tableName} filters={filters} />
+              <ChatPanel tableName={tableName} />
+              <ExecutiveSummary tableName={tableName} />
+            </div>
+          )}
+        </div>
+      </main>
     </div>
   )
 }

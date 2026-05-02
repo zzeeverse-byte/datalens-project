@@ -28,35 +28,56 @@ export const ExecutiveSummary: React.FC<ExecutiveSummaryProps> = ({ tableName })
     };
 
     return (
-        <div className="mt-8 bg-blue-50 p-6 rounded-lg shadow-md max-w-5xl mx-auto border border-blue-100">
-            <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-semibold text-gray-800">Executive Summary</h2>
+        <div className="bg-sky-50 p-8 rounded-2xl shadow-sm border border-sky-100 mt-8">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                <div className="flex items-center">
+                    <div className="p-2 bg-blue-100 rounded-lg text-blue-600 mr-4">
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 className="text-2xl font-bold text-slate-800 tracking-tight">Executive Summary</h2>
+                        <p className="text-slate-500 text-sm mt-1">AI-generated insights and recommendations based on your data</p>
+                    </div>
+                </div>
+                
                 {!summary && !loading && (
                     <button 
                         onClick={handleGenerate}
-                        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors shadow-sm"
+                        className="bg-blue-600 text-white px-6 py-2.5 rounded-full hover:bg-blue-700 hover:shadow-md transition-all font-medium flex items-center"
                     >
-                        Generate Executive Summary
+                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                        Generate Insights
                     </button>
                 )}
             </div>
             
             {loading && (
-                <div className="flex items-center gap-3 text-gray-600 mt-4">
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"></div>
-                    <span>Analyzing dataset and generating summary...</span>
+                <div className="flex items-center justify-center p-12 bg-white rounded-xl border border-sky-100/50 shadow-sm">
+                    <div className="flex flex-col items-center">
+                        <div className="animate-spin rounded-full h-10 w-10 border-4 border-slate-100 border-t-blue-600 mb-4"></div>
+                        <span className="text-slate-600 font-medium animate-pulse">Analyzing dataset and generating summary...</span>
+                    </div>
                 </div>
             )}
             
             {error && (
-                <div className="text-red-600 bg-red-50 p-3 rounded mt-4 border border-red-200">
+                <div className="text-red-700 bg-red-50 p-4 rounded-xl border border-red-200 flex items-center shadow-sm">
+                    <svg className="w-5 h-5 mr-3 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
                     {error}
                 </div>
             )}
             
             {summary && (
-                <div className="prose max-w-none text-gray-700 whitespace-pre-wrap leading-relaxed bg-white p-6 rounded border border-gray-100 shadow-inner">
-                    {summary}
+                <div className="prose prose-slate max-w-none bg-white p-8 rounded-xl border border-sky-100 shadow-sm">
+                    <div className="whitespace-pre-wrap leading-relaxed text-slate-700">
+                        {summary}
+                    </div>
                 </div>
             )}
         </div>

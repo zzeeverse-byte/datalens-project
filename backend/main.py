@@ -1,4 +1,5 @@
-from fastapi import FastAPI, UploadFile, File, Query
+from fastapi import FastAPI, UploadFile, File
+from fastapi.middleware.cors import CORSMiddleware
 from typing import Optional
 from csv_service import parse_csv, store_csv_in_sqlite
 from chat_service import chat_with_data, generate_executive_summary
@@ -18,6 +19,14 @@ import os
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173", "http://localhost:5174"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 @app.get("/api/health")
 def health_check():
     return {"status": "ok"}
@@ -26,24 +35,15 @@ def health_check():
 async def upload_csv(file: UploadFile = File(...)):
     if not file.filename.endswith(".csv"):
         return {"status": "error", "message": "File must be a CSV"}
-    
     try:
-        # Save the uploaded file to a temporary location
         with tempfile.NamedTemporaryFile(delete=False, suffix=".csv") as tmp:
             tmp.write(await file.read())
             tmp_path = tmp.name
-
-        # Parse CSV
         df = parse_csv(tmp_path)
-        
-        # Store in SQLite, using the filename without extension as the table name
         table_name = os.path.splitext(file.filename)[0]
         table_name = table_name.replace('-', '_').replace(' ', '_')
         store_csv_in_sqlite(df, table_name)
-        
-        # Clean up temp file
         os.remove(tmp_path)
-        
         return {
             "table_name": table_name,
             "row_count": len(df),
