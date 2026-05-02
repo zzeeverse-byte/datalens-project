@@ -6,9 +6,10 @@
 - **Handling Deprecations/Failures:** The agent correctly realized that `gemini-1.5-pro` might result in a 404/403 block on the current API key and dynamically adapted the codebase to utilize the latest available configurations.
 
 ## Moments we had to redirect the agent
-1. **Model Selection/API Error Masking:** The agent initially wrote tests that falsely passed because the response text contained numeric error codes (`400`, `404`) instead of actual data. The agent had to be instructed to mock the API calls via `unittest.mock` to ensure tests passed predictably regardless of the API key status.
-2. **Type Safety with JSON:** The agent initially attempted to pass `int64` numpy types directly into `json.dumps`, which caused a serialization exception. The agent subsequently diagnosed this execution failure and rectified the logic by adding the `default=str` parameter.
-3. **Frontend Testing Matchers:** The agent initially used `getByText` when writing the vitest UI tests, which crashed because the word "upload" appeared multiple times in the DOM. The agent had to parse the log failure and rewrite the code to use `getAllByText`.
+1. First we had to manually fix a CORS error because the agent forgot to add it and the frontend could not connect to the backend.
+2. Second the Gemini API key leaked to GitHub twice because the gitignore had quotes around .env which made it not work, we had to get new API keys both times.
+3. Third Tailwind CSS completely broke the UI showing giant black icons so we had to remove Tailwind entirely and rewrite all components with plain inline CSS.
+4. Fourth the agent wrote from fastapi import FastAPI twice in main.py which caused the backend to restart in an infinite loop and we had to manually delete the duplicate line.
 
 ## What we would change
 - Provide explicit mock instructions during the initial TDD specs rather than allowing the agent to rely on a live API key for testing LLM behavior.

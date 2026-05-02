@@ -62,3 +62,9 @@ A comprehensive full-stack analytics dashboard for exploring datasets, running n
 ## Team Members
 - [Placeholder Name 1]
 - [Placeholder Name 2]
+
+## Troubleshooting
+- **Port already in use** — kill the process or change the port.
+- **API key error** — get a new key from aistudio.google.com.
+- **Module not found** — run `pip install -r requirements.txt` inside the backend folder.
+- **Node modules missing** — run `npm install` inside the frontend folder.
