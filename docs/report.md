@@ -20,3 +20,16 @@
 - **Spec-Driven-Development:** Providing clear, unambiguous user requests allowed the agent to methodically isolate Phase logic (e.g. focusing entirely on charting before moving to LLM chat).
 - **Planning-and-Task-Breakdown:** The agent systematically mapped out the exact components, API boundaries, and test assertions needed for each request, preventing monolithic or out-of-scope code generation.
 - **Test-Driven-Development:** Writing the test components directly alongside the features forced the agent to actively validate its own logic, leading to the self-correction of JSON serialization errors and DOM matcher constraints.
+- **Incremental-Implementation:** The agent built one feature at a time in thin 
+vertical slices — upload first, then profiling, then charts, then filters, 
+then chat. This prevented big-bang integrations and made debugging easier 
+since each slice was tested before moving to the next.
+
+- **Documentation-and-ADRs:** The agent automatically structured ADRs with 
+context, options considered, decision, and trade-offs sections when asked 
+to document decisions. This produced genuinely useful records of why we 
+chose Gemini over other LLMs and why we used SQLite.
+
+- **Git-Workflow-and-Versioning:** The agent consistently used descriptive 
+commit messages like "feat:", "fix:", and "docs:" prefixes and committed 
+after each working feature rather than accumulating changes.
