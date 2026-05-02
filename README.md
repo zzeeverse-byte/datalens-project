@@ -60,8 +60,8 @@ A comprehensive full-stack analytics dashboard for exploring datasets, running n
 5. **Summarize:** Click the "Generate Executive Summary" button to receive a detailed, AI-generated professional report based on the real dataset profile.
 
 ## Team Members
-- Zainab Irfan
-- Sohana Pardeep
+- Zainab Irfan — backend development, LLM chat integration, data profiling, testing
+- Sohana Pardeep — frontend development, dashboard charts, filters, documentation
 
 ## Troubleshooting
 - **Port already in use** — kill the process or change the port.
