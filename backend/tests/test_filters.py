@@ -39,3 +39,24 @@ def test_chart_filters():
     data_gp_school = resp_gp_school.json()["data"]
     assert len(data_gp_school) == 1
     assert data_gp_school[0]["school"] == "GP"
+
+def test_get_dynamic_filters():
+    # 1. Upload CSV
+    file_path = os.path.join(os.path.dirname(__file__), "..", "..", "student-mat.csv")
+    with open(file_path, "rb") as f:
+        upload_resp = client.post("/api/upload", files={"file": ("student-mat.csv", f, "text/csv")})
+    
+    assert upload_resp.status_code == 200
+    table_name = upload_resp.json()["table_name"]
+
+    # 2. Call /api/filters
+    resp = client.get(f"/api/filters?table_name={table_name}")
+    assert resp.status_code == 200
+    filters = resp.json()["filters"]
+    
+    # 3. Verify structure of response
+    assert len(filters) > 0
+    # ensure 'school' is one of the returned columns, and it has options 'GP', 'MS'
+    school_filter = next((f for f in filters if f["column"] == "school"), None)
+    assert school_filter is not None
+    assert set(school_filter["options"]) == {"GP", "MS"}

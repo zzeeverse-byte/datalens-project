@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, Request
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Optional
 from csv_service import parse_csv, store_csv_in_sqlite
@@ -11,7 +11,8 @@ from data_service import (
     get_internet_vs_grade,
     get_absences_vs_grade,
     get_parent_education_vs_grade,
-    get_generic_charts
+    get_generic_charts,
+    get_dynamic_filters
 )
 from database import get_db_connection
 import pandas as pd
@@ -82,28 +83,28 @@ def api_summary(req: SummaryRequest):
         return {"status": "error", "message": str(e)}
 
 @app.get("/api/charts/grade-by-school")
-def api_grade_by_school(table_name: str, school: Optional[str] = None, sex: Optional[str] = None, internet: Optional[str] = None):
-    filters = {k: v for k, v in {"school": school, "sex": sex, "internet": internet}.items() if v is not None}
+def api_grade_by_school(request: Request, table_name: str):
+    filters = {k: v for k, v in request.query_params.items() if k != "table_name" and v is not None and v != "All"}
     return {"status": "success", "data": get_avg_grade_by_school(table_name, filters)}
 
 @app.get("/api/charts/studytime-vs-grade")
-def api_studytime_vs_grade(table_name: str, school: Optional[str] = None, sex: Optional[str] = None, internet: Optional[str] = None):
-    filters = {k: v for k, v in {"school": school, "sex": sex, "internet": internet}.items() if v is not None}
+def api_studytime_vs_grade(request: Request, table_name: str):
+    filters = {k: v for k, v in request.query_params.items() if k != "table_name" and v is not None and v != "All"}
     return {"status": "success", "data": get_studytime_vs_grade(table_name, filters)}
 
 @app.get("/api/charts/internet-vs-grade")
-def api_internet_vs_grade(table_name: str, school: Optional[str] = None, sex: Optional[str] = None, internet: Optional[str] = None):
-    filters = {k: v for k, v in {"school": school, "sex": sex, "internet": internet}.items() if v is not None}
+def api_internet_vs_grade(request: Request, table_name: str):
+    filters = {k: v for k, v in request.query_params.items() if k != "table_name" and v is not None and v != "All"}
     return {"status": "success", "data": get_internet_vs_grade(table_name, filters)}
 
 @app.get("/api/charts/absences-vs-grade")
-def api_absences_vs_grade(table_name: str, school: Optional[str] = None, sex: Optional[str] = None, internet: Optional[str] = None):
-    filters = {k: v for k, v in {"school": school, "sex": sex, "internet": internet}.items() if v is not None}
+def api_absences_vs_grade(request: Request, table_name: str):
+    filters = {k: v for k, v in request.query_params.items() if k != "table_name" and v is not None and v != "All"}
     return {"status": "success", "data": get_absences_vs_grade(table_name, filters)}
 
 @app.get("/api/charts/parent-education-vs-grade")
-def api_parent_education_vs_grade(table_name: str, school: Optional[str] = None, sex: Optional[str] = None, internet: Optional[str] = None):
-    filters = {k: v for k, v in {"school": school, "sex": sex, "internet": internet}.items() if v is not None}
+def api_parent_education_vs_grade(request: Request, table_name: str):
+    filters = {k: v for k, v in request.query_params.items() if k != "table_name" and v is not None and v != "All"}
     return {"status": "success", "data": get_parent_education_vs_grade(table_name, filters)}
 
 @app.get("/api/charts/generic")
@@ -111,5 +112,13 @@ def api_generic_charts(table_name: str):
     try:
         charts = get_generic_charts(table_name)
         return {"status": "success", "charts": charts}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+@app.get("/api/filters")
+def api_filters(table_name: str):
+    try:
+        filters = get_dynamic_filters(table_name)
+        return {"status": "success", "filters": filters}
     except Exception as e:
         return {"status": "error", "message": str(e)}

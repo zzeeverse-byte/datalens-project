@@ -22,7 +22,7 @@ function App() {
           {tableName && (
             <div style={{ marginTop: '2.5rem', display: 'flex', flexDirection: 'column', gap: '3rem' }}>
               <ProfilePanel tableName={tableName} />
-              <FilterPanel filters={filters} setFilters={setFilters} />
+              <FilterPanel tableName={tableName} filters={filters} setFilters={setFilters} />
               <Dashboard tableName={tableName} filters={filters} />
               <ChatPanel tableName={tableName} />
               <ExecutiveSummary tableName={tableName} />
