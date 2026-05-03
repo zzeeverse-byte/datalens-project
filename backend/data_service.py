@@ -90,3 +90,39 @@ def get_parent_education_vs_grade(table_name: str, filters: dict = None):
     df = pd.read_sql(f"SELECT Medu, AVG(G3) as avg_G3 FROM {table_name}{where_clause} GROUP BY Medu ORDER BY Medu", conn, params=params)
     conn.close()
     return df.to_dict(orient="records")
+
+def get_generic_charts(table_name: str):
+    conn = get_db_connection()
+    try:
+        df = pd.read_sql(f"SELECT * FROM {table_name}", conn)
+    finally:
+        conn.close()
+        
+    charts = []
+    
+    for col in df.columns[:4]:
+        if pd.api.types.is_numeric_dtype(df[col]):
+            valid_data = df[col].dropna()
+            if len(valid_data) == 0:
+                continue
+            counts, bins = np.histogram(valid_data, bins=min(10, len(valid_data.unique())))
+            data = [{"bin": f"{bins[i]:.1f}-{bins[i+1]:.1f}", "count": int(c)} for i, c in enumerate(counts)]
+            charts.append({
+                "title": f"Distribution of {col}",
+                "type": "numeric",
+                "dataKeyX": "bin",
+                "dataKeyY": "count",
+                "data": data
+            })
+        else:
+            counts = df[col].value_counts(dropna=False).head(10).to_dict()
+            data = [{"name": str(k), "value": int(v)} for k, v in counts.items()]
+            charts.append({
+                "title": f"Count of {col}",
+                "type": "categorical",
+                "dataKeyX": "name",
+                "dataKeyY": "value",
+                "data": data
+            })
+            
+    return charts

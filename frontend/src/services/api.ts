@@ -29,6 +29,13 @@ export const getChartData = async (endpoint: string, tableName: string, filters:
     return response.data;
 };
 
+export const getGenericCharts = async (tableName: string) => {
+    const response = await axios.get(`${API_BASE_URL}/charts/generic`, {
+        params: { table_name: tableName }
+    });
+    return response.data;
+};
+
 export const sendChatMessage = async (message: string, tableName: string) => {
     const response = await axios.post(`${API_BASE_URL}/chat`, {
         message: message,

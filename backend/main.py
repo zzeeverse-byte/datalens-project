@@ -10,7 +10,8 @@ from data_service import (
     get_studytime_vs_grade,
     get_internet_vs_grade,
     get_absences_vs_grade,
-    get_parent_education_vs_grade
+    get_parent_education_vs_grade,
+    get_generic_charts
 )
 from database import get_db_connection
 import pandas as pd
@@ -104,3 +105,11 @@ def api_absences_vs_grade(table_name: str, school: Optional[str] = None, sex: Op
 def api_parent_education_vs_grade(table_name: str, school: Optional[str] = None, sex: Optional[str] = None, internet: Optional[str] = None):
     filters = {k: v for k, v in {"school": school, "sex": sex, "internet": internet}.items() if v is not None}
     return {"status": "success", "data": get_parent_education_vs_grade(table_name, filters)}
+
+@app.get("/api/charts/generic")
+def api_generic_charts(table_name: str):
+    try:
+        charts = get_generic_charts(table_name)
+        return {"status": "success", "charts": charts}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
