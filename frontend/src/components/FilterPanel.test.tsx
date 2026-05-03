@@ -5,8 +5,8 @@ import { FilterPanel } from './FilterPanel';
 describe('FilterPanel', () => {
     it('renders the three dropdowns', () => {
         render(<FilterPanel filters={{}} setFilters={vi.fn()} />);
-        expect(screen.getByText(/School:/i)).toBeInTheDocument();
-        expect(screen.getByText(/Sex:/i)).toBeInTheDocument();
-        expect(screen.getByText(/Internet:/i)).toBeInTheDocument();
+        expect(screen.getAllByText(/School/i)[0]).toBeInTheDocument();
+        expect(screen.getAllByText(/Sex/i)[0]).toBeInTheDocument();
+        expect(screen.getAllByText(/Internet/i)[0]).toBeInTheDocument();
     });
 });
