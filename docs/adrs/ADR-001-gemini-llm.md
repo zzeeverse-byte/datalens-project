@@ -9,6 +9,9 @@ Accepted
 ## Context
 We needed a Large Language Model (LLM) with robust tool-calling support to power the intelligent chat interface and the automated executive summary generator for our dataset analysis platform.
 
+## Options Considered
+We evaluated three options. Option 1 was OpenAI GPT-4 which requires a paid API key with no free tier making it inaccessible for this project. Option 2 was Anthropic Claude which has a free tier but lower rate limits and requires a separate account setup. Option 3 was Google Gemini which is free with a Google account, has generous rate limits, supports native tool-calling, and integrates easily with Python. We chose Gemini.
+
 ## Decision
 We chose the Gemini API because it is freely accessible with a standard Google account via AI Studio, provides extremely fast inference, and natively supports automatic tool-calling functionality.
 
