@@ -91,10 +91,11 @@ def get_parent_education_vs_grade(table_name: str, filters: dict = None):
     conn.close()
     return df.to_dict(orient="records")
 
-def get_generic_charts(table_name: str):
+def get_generic_charts(table_name: str, filters: dict = None):
     conn = get_db_connection()
+    where_clause, params = build_where_clause(filters)
     try:
-        df = pd.read_sql(f"SELECT * FROM {table_name}", conn)
+        df = pd.read_sql(f"SELECT * FROM {table_name}{where_clause}", conn, params=params)
     finally:
         conn.close()
         

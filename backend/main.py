@@ -108,9 +108,10 @@ def api_parent_education_vs_grade(request: Request, table_name: str):
     return {"status": "success", "data": get_parent_education_vs_grade(table_name, filters)}
 
 @app.get("/api/charts/generic")
-def api_generic_charts(table_name: str):
+def api_generic_charts(request: Request, table_name: str):
+    filters = {k: v for k, v in request.query_params.items() if k != "table_name" and v is not None and v != "All"}
     try:
-        charts = get_generic_charts(table_name)
+        charts = get_generic_charts(table_name, filters)
         return {"status": "success", "charts": charts}
     except Exception as e:
         return {"status": "error", "message": str(e)}

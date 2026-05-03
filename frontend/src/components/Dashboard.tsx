@@ -17,7 +17,7 @@ export const Dashboard: React.FC<{ tableName: string, filters?: any }> = ({ tabl
         getChartData('grade-by-school', tableName, {})
             .then(res => {
                 if (res.status === 'error' || !res.data || res.data.length === 0) {
-                    return getGenericCharts(tableName).then(genRes => {
+                    return getGenericCharts(tableName, filters).then(genRes => {
                         if (genRes.status === 'success') {
                             setGenericCharts(genRes.charts || []);
                             setIsGeneric(true);
@@ -28,7 +28,7 @@ export const Dashboard: React.FC<{ tableName: string, filters?: any }> = ({ tabl
                 }
             })
             .catch(() => {
-                getGenericCharts(tableName).then(genRes => {
+                getGenericCharts(tableName, filters).then(genRes => {
                     if (genRes.status === 'success') {
                         setGenericCharts(genRes.charts || []);
                         setIsGeneric(true);
@@ -38,7 +38,7 @@ export const Dashboard: React.FC<{ tableName: string, filters?: any }> = ({ tabl
             .finally(() => {
                 setLoading(false);
             });
-    }, [tableName]);
+    }, [tableName, filters]);
 
     if (loading) {
         return <div style={{ paddingTop: '1rem', color: '#64748b' }}>Loading dashboard...</div>;
