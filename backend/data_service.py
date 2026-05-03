@@ -137,13 +137,12 @@ def get_dynamic_filters(table_name: str):
     filters_options = []
     
     for col in df.columns:
-        # We also want to include integer columns if they act as categories (e.g., Medu, Fedu)
-        # So we just check if unique values < 10
-        unique_vals = df[col].dropna().unique()
-        if len(unique_vals) < 10:
-            filters_options.append({
-                "column": col,
-                "options": sorted([str(x) for x in unique_vals])
-            })
+        if pd.api.types.is_object_dtype(df[col]) or pd.api.types.is_string_dtype(df[col]):
+            unique_vals = df[col].dropna().unique()
+            if len(unique_vals) < 10:
+                filters_options.append({
+                    "column": col,
+                    "options": sorted([str(x) for x in unique_vals])
+                })
                 
     return filters_options
