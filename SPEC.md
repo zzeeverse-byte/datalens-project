@@ -59,6 +59,38 @@ The 5 chat questions for the student dataset are:
 - **Coverage**: 80% coverage target.
 - Write tests before code.
 
+## Code Style
+
+### Frontend (React/TypeScript)
+```tsx
+import React from 'react';
+
+interface Props {
+  title: string;
+  data: number[];
+}
+
+export const ChartCard: React.FC<Props> = ({ title, data }) => {
+  return (
+    <div style={{ padding: '1rem', background: 'white', borderRadius: '8px' }}>
+      <h2>{title}</h2>
+    </div>
+  );
+};
+```
+Key conventions: use TypeScript interfaces for all props, use functional components only, use camelCase for variables, use PascalCase for components.
+
+### Backend (Python)
+```python
+from fastapi import FastAPI
+import pandas as pd
+
+def load_csv(file_path: str) -> pd.DataFrame:
+    # Auto-detect separator for any CSV
+    return pd.read_csv(file_path, sep=None, engine='python')
+```
+Key conventions: use type hints on all functions, use docstrings for complex functions, use snake_case for variables and functions.
+
 ## Environment Variables
 - `GEMINI_API_KEY`
 - `LLM_PROVIDER=gemini`
