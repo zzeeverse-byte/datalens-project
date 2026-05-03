@@ -5,6 +5,10 @@
 - **Problem Solving:** The agent expertly resolved environment-specific execution hurdles, such as diagnosing the Windows Execution Policy restrictions when trying to run npm scripts and pivoting to `npm.cmd`.
 - **Handling Deprecations/Failures:** The agent correctly realized that `gemini-1.5-pro` might result in a 404/403 block on the current API key and dynamically adapted the codebase to utilize the latest available configurations.
 
+First — The agent correctly auto-detected that student-mat.csv uses semicolons as separators instead of commas and used sep=None with engine=python in pandas read_csv without being explicitly told to handle this edge case.
+
+Second — When the pytest tests failed due to import path issues, the agent diagnosed the problem independently, created a pytest.ini file with the correct pythonpath configuration, and fixed all 10 tests without any guidance from us.
+
 ## Moments we had to redirect the agent
 1. First we had to manually fix a CORS error because the agent forgot to add it and the frontend could not connect to the backend.
 2. Second the Gemini API key leaked to GitHub twice because the gitignore had quotes around .env which made it not work, we had to get new API keys both times.
