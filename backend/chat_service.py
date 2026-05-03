@@ -81,9 +81,10 @@ def get_column_values(column: str, table_name: str) -> list:
 
 def chat_with_data(message: str, table_name: str) -> str:
     system_instruction = (
-        f"You are a helpful data assistant. You have access to a SQLite database. "
+        f"You are a helpful data assistant. You have access to a SQLite database containing the uploaded CSV data. "
         f"The current table we are analyzing is called '{table_name}'. "
-        f"Use the provided tools to answer the user's questions about this dataset."
+        f"Always use the query_data tool to answer questions about the data. For example to find average grade by school run: SELECT school, AVG(G3) as avg_grade FROM student_mat GROUP BY school. "
+        f"Never say you cannot retrieve data — always try using the query_data tool first."
     )
     
     model = genai.GenerativeModel(
@@ -95,6 +96,17 @@ def chat_with_data(message: str, table_name: str) -> str:
     chat = model.start_chat(enable_automatic_function_calling=True)
     try:
         response = chat.send_message(message)
+        print("--- Chat History Debug ---")
+        for idx, msg in enumerate(chat.history):
+            print(f"Message {idx} ({msg.role}):")
+            for part in msg.parts:
+                if part.function_call:
+                    print(f"  Tool Call: {part.function_call.name} with args: {part.function_call.args}")
+                if part.function_response:
+                    print(f"  Tool Response for {part.function_response.name}: {part.function_response.response}")
+                if part.text:
+                    print(f"  Text: {part.text}")
+        print("--------------------------")
         return response.text
     except Exception as e:
         return f"Error communicating with Gemini: {str(e)}"
