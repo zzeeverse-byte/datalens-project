@@ -3,6 +3,7 @@ import pandas as pd
 import google.generativeai as genai
 import json
 from dotenv import load_dotenv
+import sqlite3
 from database import get_db_connection
 from data_service import profile_dataframe
 
@@ -32,17 +33,29 @@ def _convert_to_native(obj):
 
 def query_data(query: str) -> list:
     """Runs a SQL SELECT query against the SQLite database and returns the results as a list of dictionaries."""
-    conn = get_db_connection()
+    db_path = os.path.join(os.path.dirname(__file__), "..", "datalens.db")
     try:
         # Basic safety check
         if not query.strip().upper().startswith("SELECT"):
             return [{"error": "Only SELECT queries are allowed."}]
-        df = pd.read_sql(query, conn)
+        
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        cursor.execute(query)
+        rows = cursor.fetchall()
+        
+        columns = [description[0] for description in cursor.description] if cursor.description else []
+        
+        records = []
+        for row in rows:
+            record = {}
+            for i, col in enumerate(columns):
+                record[col] = row[i]
+            records.append(record)
+            
         conn.close()
-        records = df.to_dict(orient="records")
-        return _convert_to_native(records)
+        return records
     except Exception as e:
-        conn.close()
         return [{"error": str(e)}]
 
 def get_statistics(column: str, table_name: str) -> dict:
